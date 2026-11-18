@@ -16,6 +16,7 @@ var hold := 1.0
 
 @onready var anguy = get_meta("anguy")
 var this_material: Material
+var anguy_tween: Tween
 
 func _ready() -> void:
 	player = get_tree().get_first_node_in_group("player")
@@ -71,26 +72,36 @@ func _process(delta: float) -> void:
 	
 	var diff := player.position - position
 	diff *= diff
-	if anguy and (diff.x + diff.y + diff.z) < 9 and hold <= 0: # 3 * 3
+	if anguy and (diff.x + diff.y + diff.z) < 4 and hold <= 0:
 		player.atacar(999)
 
 func anguyar():
-	create_tween().tween_property(this_material, "albedo_color", Color(1, 0, 0, 1), 5)
-	await get_tree().create_timer(5).timeout
+	if anguy_tween:
+		anguy_tween.kill()
+	anguy_tween = create_tween()
+	anguy_tween.tween_property(this_material, "albedo_color", Color(1, 0, 0, 1), 5)
+	
+	await anguy_tween.finished
+	
 	anguy = true
 	set_meta("anguy", true)
 
 func desanguyar():
 	anguy = false
 	set_meta("anguy", false)
-	create_tween().tween_property(this_material, "albedo_color", Color(1, 1, 1, 1), 5)
-	await get_tree().create_timer(5).timeout
+	if anguy_tween:
+		anguy_tween.kill()
+	anguy_tween = create_tween()
+	anguy_tween.tween_property(this_material, "albedo_color", Color(1, 1, 1, 1), 5)
+	
+	await anguy_tween.finished
 
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("restart"):
 		position = first_state.get("pos")
 		rotation = first_state.get("rot")
 		velocity = first_state.get("vel")
+		anguy_tween.kill()
 		this_material.albedo_color = Color(1, 1, 1, 1)
 		anguy = false
 		set_meta("anguy", false)

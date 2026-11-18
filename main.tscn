@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://dfk2038eilxvx"]
 
 [ext_resource type="Script" uid="uid://db5h53wi2m6ew" path="res://player.gd" id="1_ig7tw"]
-[ext_resource type="PackedScene" uid="uid://c5e60xwf6cxal" path="res://scp_096.tscn" id="2_0xm2m"]
 [ext_resource type="PackedScene" uid="uid://mek66ouh7hc1" path="res://scp_173.tscn" id="3_h2yge"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0xm2m"]
@@ -56,9 +55,6 @@ mesh = SubResource("CapsuleMesh_ap18l")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="player" unique_id=1974550249]
 shape = SubResource("CylinderShape3D_wc5j7")
-
-[node name="scp096" parent="." unique_id=2129024816 instance=ExtResource("2_0xm2m")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.34659243, 1.7500005, 6.6220694)
 
 [node name="scp173" parent="." unique_id=1853015428 instance=ExtResource("3_h2yge")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02781868, 1.75, -9.081207)

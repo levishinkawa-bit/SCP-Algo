@@ -15,7 +15,7 @@ size = Vector3(1, 2, 1)
 
 [node name="scp173" type="CharacterBody3D" unique_id=2129024816 groups=["inimigo", "scp173"]]
 script = ExtResource("1_huo3q")
-metadata/olhado = 0
+metadata/olhado = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=873363649]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

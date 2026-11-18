@@ -16,10 +16,6 @@ var ded := false
 	}
 
 func _physics_process(delta: float) -> void:
-	if ded:  return
-	var direction = Input.get_vector("esquerda", "direita", "frente", "tras")
-	var vector = (transform.basis * Vector3(direction.x, 0, direction.y)).normalized()
-	
 	velDebuf = 0
 	if not is_on_floor():
 		velDebuf = 1
@@ -29,8 +25,11 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.y = 0
 	
-	velocity.x = vector.x * (vel - velDebuf)
-	velocity.z = vector.z * (vel - velDebuf)
+	if not ded:
+		var direction = Input.get_vector("esquerda", "direita", "frente", "tras")
+		var vector = (transform.basis * Vector3(direction.x, 0, direction.y)).normalized()
+		velocity.x = vector.x * (vel - velDebuf)
+		velocity.z = vector.z * (vel - velDebuf)
 	
 	move_and_slide()
 
