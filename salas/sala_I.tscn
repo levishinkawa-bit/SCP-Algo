@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://ci4efvdx0mt7b"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_5es3m"]
+size = Vector3(10, 1, 10)
+
+[sub_resource type="BoxMesh" id="BoxMesh_yagb0"]
+size = Vector3(1, 9, 10)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ap18l"]
+size = Vector3(1, 9, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wc5j7"]
+size = Vector3(1, 9, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5es3m"]
+size = Vector3(1, 9, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ap18l"]
+size = Vector3(10, 1, 10)
+
+[sub_resource type="BoxMesh" id="BoxMesh_il7ww"]
+size = Vector3(10, 1, 10)
+
+[node name="sala_I" type="Node3D" unique_id=1387947887 groups=["sala_i"]]
+
+[node name="chão" type="MeshInstance3D" parent="." unique_id=521466488]
+mesh = SubResource("BoxMesh_5es3m")
+
+[node name="parede2" type="MeshInstance3D" parent="." unique_id=906481377]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 5, 0)
+mesh = SubResource("BoxMesh_yagb0")
+
+[node name="parede" type="MeshInstance3D" parent="." unique_id=2085202675]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 5, 0)
+mesh = SubResource("BoxMesh_ap18l")
+
+[node name="colisão" type="StaticBody3D" parent="." unique_id=1037877453]
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="colisão" unique_id=1517699122]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 5, 0)
+shape = SubResource("BoxShape3D_wc5j7")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="colisão" unique_id=2084131432]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 5, 0)
+shape = SubResource("BoxShape3D_5es3m")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="colisão" unique_id=1959537420]
+shape = SubResource("BoxShape3D_ap18l")
+
+[node name="teto" type="MeshInstance3D" parent="." unique_id=807538412]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+mesh = SubResource("BoxMesh_il7ww")
