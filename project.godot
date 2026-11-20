@@ -29,6 +29,10 @@ window/stretch/aspect="expand"
 player=""
 scp173=""
 inimigo=""
+sala_i=""
+mapa=""
+scp096=""
+mundo=""
 
 [input]
 

@@ -1,16 +1,10 @@
-extends CharacterBody3D
+extends SCP
 
-@onready var vel := Config.base_vel * 1.75
-
-@onready var first_state = {
-	pos = self.position,
-	rot = self.rotation,
-	vel = self.velocity
-	}
+const tolerancia := 0.5
 
 var anguy_timer := 0.0
-var player: CharacterBody3D
-var can_get_anguy := false
+var can_get_anguy_time := 0.0
+var visivel := false
 var anguy_process := false
 var hold := 1.0
 
@@ -18,46 +12,55 @@ var hold := 1.0
 var this_material: Material
 var anguy_tween: Tween
 
+var raycasts := [RayCast3D.new(), RayCast3D.new(), RayCast3D.new(), RayCast3D.new()]
+
 func _ready() -> void:
-	player = get_tree().get_first_node_in_group("player")
+	super._ready()
+	vel = 1.75
 	$VisibleOnScreenNotifier3D.screen_entered.connect(_screen_entered)
 	$VisibleOnScreenNotifier3D.screen_exited.connect(_screen_exited)
+	for raycast: RayCast3D in raycasts:
+		raycast.enabled = false
+		raycast.exclude_parent = true
+		raycast.hit_from_inside = true
+		add_child(raycast)
+	raycasts[0].position = Vector3(-0.25, 1.75, -0.5)
+	raycasts[1].position = Vector3(0.25, 1.75, -0.5)
+	raycasts[2].position = Vector3(-0.25, 1.25, -0.5)
+	raycasts[3].position = Vector3(0.25, 1.25, -0.5)
 	var mat: Material = $MeshInstance3D.get_active_material(0)
 	if mat:
 		this_material = mat.duplicate()
 		$MeshInstance3D.set_surface_override_material(0, this_material)
 
 func _physics_process(delta: float) -> void:
-	if player and anguy and hold <= 0:
-		var alvo := player.global_position
-		var old_rotation := rotation
-		
-		look_at(alvo)
-		rotation.x = 0
-		rotation.z = 0
-		
-		rotation.y = lerp_angle(old_rotation.y, rotation.y, 1.0 - exp(-(vel + 2) * delta))
+	super._physics_process(delta)
 	
-	if not is_on_floor():
-		velocity.y -= Config.gravidade * delta
+	if anguy and hold <= 0: 
+		alvo = player.global_position
+		virar_ao_alvo(delta, 5)
 	
-	if anguy and hold <= 0:
-		var vector := (transform.basis * Vector3(0, 0, -1)).normalized() * vel
-		velocity.z = vector.z
-		velocity.x = vector.x
-	else:
+	if not anguy or not hold <= 0:
 		velocity.x = 0
 		velocity.z = 0
 	move_and_slide()
 
 func _screen_entered():
-	can_get_anguy = true
+	visivel = true
 
 func _screen_exited():
-	can_get_anguy = false
+	visivel = false
 
 func _process(delta: float) -> void:
-	if can_get_anguy and not anguy_process and hold <= 0:
+	var relative_face_pos := (player.global_position - (global_position + Vector3(0, 0, 0.5))).normalized()
+	
+	if visivel and relative_face_pos.dot(-global_basis.z.normalized()) > 0 and cara_raycast():
+		can_get_anguy_time += delta
+	else:
+		can_get_anguy_time -= delta
+	can_get_anguy_time = clamp(can_get_anguy_time, 0, tolerancia)
+	
+	if can_get_anguy_time == tolerancia and not anguy_process and hold <= 0:
 		anguy_process = true
 		anguyar()
 		anguy_timer = 60
@@ -70,10 +73,18 @@ func _process(delta: float) -> void:
 	if not hold <= 0:
 		hold -= delta
 	
-	var diff := player.position - position
-	diff *= diff
-	if anguy and (diff.x + diff.y + diff.z) < 4 and hold <= 0:
-		player.atacar(999)
+	if anguy: tentar_atacar(999)
+
+func cara_raycast():
+	for raycast in raycasts:
+		raycast.enabled = true
+		raycast.target_position = raycast.to_local(player.global_position + Vector3.UP)
+		raycast.force_raycast_update()
+		var col: Object = raycast.get_collider()
+		
+		if col == player:
+			return true
+	return false
 
 func anguyar():
 	if anguy_tween:
@@ -98,13 +109,13 @@ func desanguyar():
 
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("restart"):
-		position = first_state.get("pos")
-		rotation = first_state.get("rot")
-		velocity = first_state.get("vel")
-		anguy_tween.kill()
+		reset()
+		if anguy_tween:
+			anguy_tween.kill()
 		this_material.albedo_color = Color(1, 1, 1, 1)
 		anguy = false
 		set_meta("anguy", false)
 		anguy_process = false
 		anguy_timer = 0
 		hold = 1
+		can_get_anguy_time = 0

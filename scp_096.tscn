@@ -3,8 +3,7 @@
 [ext_resource type="Script" uid="uid://c2xv17qsx33my" path="res://scp096.gd" id="1_xhv7a"]
 [ext_resource type="Texture2D" uid="uid://c6nj8kuo4mu2h" path="res://icon.svg" id="2_ya06b"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_huo3q"]
-size = Vector3(1, 2, 1)
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_xhv7a"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5es3m"]
 
@@ -12,13 +11,13 @@ size = Vector3(1, 2, 1)
 material = SubResource("StandardMaterial3D_5es3m")
 size = Vector3(1, 2, 1)
 
-[node name="scp096" type="CharacterBody3D" unique_id=2129024816 groups=["inimigo", "scp173"]]
+[node name="scp096" type="CharacterBody3D" unique_id=2129024816 groups=["inimigo", "scp096"]]
 script = ExtResource("1_xhv7a")
 metadata/anguy = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=873363649]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-shape = SubResource("BoxShape3D_huo3q")
+shape = SubResource("CylinderShape3D_xhv7a")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=671771585]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -26,9 +25,12 @@ mesh = SubResource("BoxMesh_bxxb4")
 
 [node name="VisibleOnScreenNotifier3D" type="VisibleOnScreenNotifier3D" parent="." unique_id=1354044324]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-aabb = AABB(-0.75, -0.75, -0.75, 1.5, 2.5, 1.5)
+aabb = AABB(-0.5, 0.5, -0.5, 1, 1, 1)
 
 [node name="Decal" type="Decal" parent="." unique_id=1855434969]
 transform = Transform3D(0.99999994, 0, 4.3711385e-08, 4.3711385e-08, 1.9106855e-15, -0.99999994, 0, 1, 1.9106853e-15, 0, 1.5, -0.5)
 size = Vector3(0.99, 0.1, 0.99)
 texture_albedo = ExtResource("2_ya06b")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=680540543]
+avoidance_enabled = true

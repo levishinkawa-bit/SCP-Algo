@@ -3,8 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://c6nj8kuo4mu2h" path="res://icon.svg" id="1_fd4gt"]
 [ext_resource type="Script" uid="uid://c8lga2yxbdugh" path="res://scp173.gd" id="1_huo3q"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_huo3q"]
-size = Vector3(1, 2, 1)
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_ya06b"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lquwl"]
 albedo_color = Color(0.9999282, 0.5023602, 0.4355801, 1)
@@ -19,7 +18,7 @@ metadata/olhado = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=873363649]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-shape = SubResource("BoxShape3D_huo3q")
+shape = SubResource("CylinderShape3D_ya06b")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=671771585]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -33,3 +32,6 @@ aabb = AABB(-0.75, -0.75, -0.75, 1.5, 2.5, 1.5)
 transform = Transform3D(0.99999994, 0, 4.3711385e-08, 4.3711385e-08, 1.9106855e-15, -0.99999994, 0, 1, 1.9106853e-15, 0, 1.5, -0.5)
 size = Vector3(0.99, 0.1, 0.99)
 texture_albedo = ExtResource("1_fd4gt")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=476159265]
+avoidance_enabled = true
